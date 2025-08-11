@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+dist/
+coverage/
+
+# Build outputs
+*.min.js
+*.min.css
+
+# Package files
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+.env.*
+
+# Logs
+*.log
+
+# IDE files
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Test coverage
+coverage/
+*.lcov
+
+# Temporary files
+*.tmp
+*.temp
