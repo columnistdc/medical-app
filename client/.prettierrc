@@ -1,0 +1,5 @@
+{
+  "extends": "../.prettierrc",
+  "semi": false,
+  "plugins": ["prettier-plugin-tailwindcss"]
+}
