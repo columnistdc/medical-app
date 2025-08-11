@@ -3,7 +3,21 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "npm run lint:client && npm run lint:server",
+    "lint:client": "cd client && npm run lint:check",
+    "lint:server": "cd server && npm run lint:check",
+    "lint:fix": "npm run lint:fix:client && npm run lint:fix:server",
+    "lint:fix:client": "cd client && npm run lint:fix",
+    "lint:fix:server": "cd server && npm run lint:fix",
+    "format": "npm run format:client && npm run format:server",
+    "format:client": "cd client && npm run format",
+    "format:server": "cd server && npm run format",
+    "format:check": "npm run format:check:client && npm run format:check:server",
+    "format:check:client": "cd client && npm run format:check",
+    "format:check:server": "cd server && npm run format:check",
+    "code:check": "npm run lint && npm run format:check",
+    "code:fix": "npm run lint:fix && npm run format"
   },
   "devDependencies": {
     "husky": "8.0.3",

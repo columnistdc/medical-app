@@ -4,6 +4,9 @@ module.exports = {
     'cd client && npm run lint:fix',
     'cd client && npm run format'
   ],
+  'client/**/*.{json,md,css,scss}': [
+    'cd client && npm run format'
+  ],
   // For server files
   'server/**/*.{js,ts}': [
     'cd server && npm run lint:fix',
