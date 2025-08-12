@@ -73,7 +73,7 @@ describe('PatientsService', () => {
       mockReadFile
         .mockResolvedValueOnce('mock csv content 1')
         .mockResolvedValueOnce('mock csv content 2');
-      mockParse.mockResolvedValueOnce(mockPatients1Data).mockResolvedValueOnce(mockPatients2Data);
+      mockParse.mockReturnValueOnce(mockPatients1Data).mockReturnValueOnce(mockPatients2Data);
 
       const result = await service.findAll();
 
@@ -98,7 +98,7 @@ describe('PatientsService', () => {
       mockReadFile
         .mockResolvedValueOnce('mock csv content 1')
         .mockResolvedValueOnce('mock csv content 2');
-      mockParse.mockResolvedValueOnce(mockPatients1Data).mockResolvedValueOnce(mockPatients2Data);
+      mockParse.mockReturnValueOnce(mockPatients1Data).mockReturnValueOnce(mockPatients2Data);
 
       const result = await service.findByClinicId(1);
 
@@ -111,7 +111,7 @@ describe('PatientsService', () => {
       mockReadFile
         .mockResolvedValueOnce('mock csv content 1')
         .mockResolvedValueOnce('mock csv content 2');
-      mockParse.mockResolvedValueOnce(mockPatients1Data).mockResolvedValueOnce(mockPatients2Data);
+      mockParse.mockReturnValueOnce(mockPatients1Data).mockReturnValueOnce(mockPatients2Data);
 
       const result = await service.findByClinicId(999);
 
@@ -124,7 +124,7 @@ describe('PatientsService', () => {
       mockReadFile
         .mockResolvedValueOnce('mock csv content 1')
         .mockResolvedValueOnce('mock csv content 2');
-      mockParse.mockResolvedValueOnce(mockPatients1Data).mockResolvedValueOnce(mockPatients2Data);
+      mockParse.mockReturnValueOnce(mockPatients1Data).mockReturnValueOnce(mockPatients2Data);
 
       const result = await service.findById(1);
 
@@ -135,7 +135,7 @@ describe('PatientsService', () => {
       mockReadFile
         .mockResolvedValueOnce('mock csv content 1')
         .mockResolvedValueOnce('mock csv content 2');
-      mockParse.mockResolvedValueOnce(mockPatients1Data).mockResolvedValueOnce(mockPatients2Data);
+      mockParse.mockReturnValueOnce(mockPatients1Data).mockReturnValueOnce(mockPatients2Data);
 
       const result = await service.findById(999);
 
@@ -148,7 +148,7 @@ describe('PatientsService', () => {
       mockReadFile
         .mockResolvedValueOnce('mock csv content 1')
         .mockResolvedValueOnce('mock csv content 2');
-      mockParse.mockResolvedValueOnce(mockPatients1Data).mockResolvedValueOnce(mockPatients2Data);
+      mockParse.mockReturnValueOnce(mockPatients1Data).mockReturnValueOnce(mockPatients2Data);
 
       const result = await service.getPatientsByClinicName('Salve Fertility');
 
@@ -160,7 +160,7 @@ describe('PatientsService', () => {
       mockReadFile
         .mockResolvedValueOnce('mock csv content 1')
         .mockResolvedValueOnce('mock csv content 2');
-      mockParse.mockResolvedValueOnce(mockPatients1Data).mockResolvedValueOnce(mockPatients2Data);
+      mockParse.mockReturnValueOnce(mockPatients1Data).mockReturnValueOnce(mockPatients2Data);
 
       const result = await service.getPatientsByClinicName('London IVF');
 
@@ -180,7 +180,7 @@ describe('PatientsService', () => {
       mockReadFile
         .mockResolvedValueOnce('mock csv content 1')
         .mockResolvedValueOnce('mock csv content 2');
-      mockParse.mockResolvedValueOnce(mockPatients1Data).mockResolvedValueOnce(mockPatients2Data);
+      mockParse.mockReturnValueOnce(mockPatients1Data).mockReturnValueOnce(mockPatients2Data);
 
       const result = await service.getPatientCountByClinic();
 
