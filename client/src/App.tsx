@@ -55,7 +55,7 @@ function App() {
 
           <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
             <button
-              onClick={() => setCount((c) => c + 1)}
+              onClick={() => setCount(c => c + 1)}
               className="inline-flex items-center justify-center rounded-xl border-2 border-[rgba(255,165,0,0.5)] bg-white/5 px-5 py-2.5 transition will-change-transform hover:-translate-y-0.5 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
             >
               count is&nbsp;<span className="font-semibold">{count}</span>

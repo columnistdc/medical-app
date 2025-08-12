@@ -1,17 +1,16 @@
 // @ts-check
 import eslint from '@eslint/js';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import importPlugin from 'eslint-plugin-import';
+import prettierPlugin from 'eslint-plugin-prettier';
 
 export default tseslint.config(
   {
-    ignores: ['eslint.config.mjs', 'dist/**', 'node_modules/**'],
+    ignores: ['eslint.config.mjs', 'dist/**', 'node_modules/**', '.eslintignore'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
   // Configuration for all files (basic rules)
   {
     languageOptions: {
@@ -32,6 +31,7 @@ export default tseslint.config(
     files: ['src/**/*.ts'],
     plugins: {
       import: importPlugin,
+      prettier: prettierPlugin,
     },
     rules: {
       // Common rules
@@ -86,7 +86,10 @@ export default tseslint.config(
             'caseInsensitive': true
           }
         }
-      ]
+      ],
+      
+      // Prettier integration - turn off rules that conflict with Prettier
+      'prettier/prettier': 'error',
     },
   },
   // Special configuration for test files (both unit and e2e) - MUST BE LAST
