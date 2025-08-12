@@ -1,7 +1,9 @@
+import { readFile } from 'fs/promises';
+import { join } from 'path';
+
 import { Injectable } from '@nestjs/common';
 import { parse } from 'csv-parse/sync';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+
 import { SortParamsDto } from './dto/sort-params.dto';
 
 export interface Patient {
@@ -21,37 +23,41 @@ export class PatientsService {
     try {
       const patients1 = await this.readPatientsFile(this.dataPath1);
       const patients2 = await this.readPatientsFile(this.dataPath2);
-      
+
       const allPatients = [...patients1, ...patients2];
-      
+
       if (sortParams?.sortBy) {
         return this.sortPatients(allPatients, sortParams);
       }
-      
+
       return allPatients;
     } catch (error) {
-      throw new Error(`Failed to read patients data: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to read patients data: ${errorMessage}`);
     }
   }
 
   async findByClinicId(clinicId: number, sortParams?: SortParamsDto): Promise<Patient[]> {
     const allPatients = await this.findAll();
     const filteredPatients = allPatients.filter(patient => patient.clinic_id === clinicId);
-    
+
     if (sortParams?.sortBy) {
       return this.sortPatients(filteredPatients, sortParams);
     }
-    
+
     return filteredPatients;
   }
 
   async findById(id: number): Promise<Patient | null> {
     const allPatients = await this.findAll();
     const patient = allPatients.find(patient => patient.id === id);
-    return patient || null;
+    return patient ?? null;
   }
 
-  async getPatientsByClinicName(clinicName?: string, sortParams?: SortParamsDto): Promise<Patient[]> {
+  async getPatientsByClinicName(
+    clinicName?: string,
+    sortParams?: SortParamsDto,
+  ): Promise<Patient[]> {
     if (!clinicName) {
       return [];
     }
@@ -75,7 +81,7 @@ export class PatientsService {
     const clinicCounts = new Map<number, number>();
 
     allPatients.forEach(patient => {
-      const currentCount = clinicCounts.get(patient.clinic_id) || 0;
+      const currentCount = clinicCounts.get(patient.clinic_id) ?? 0;
       clinicCounts.set(patient.clinic_id, currentCount + 1);
     });
 
@@ -87,37 +93,38 @@ export class PatientsService {
 
   private sortPatients(patients: Patient[], sortParams: SortParamsDto): Patient[] {
     const { sortBy, sortOrder = 'asc' } = sortParams;
-    
+
     if (!sortBy) {
       return patients;
     }
 
     return [...patients].sort((a, b) => {
-      let aValue: any = a[sortBy as keyof Patient];
-      let bValue: any = b[sortBy as keyof Patient];
+      const aValue = a[sortBy as keyof Patient];
+      const bValue = b[sortBy as keyof Patient];
+
+      let aCompare: string | number;
+      let bCompare: string | number;
 
       // Handle numeric fields
       if (sortBy === 'id' || sortBy === 'clinic_id') {
-        aValue = Number(aValue);
-        bValue = Number(bValue);
+        aCompare = Number(aValue);
+        bCompare = Number(bValue);
       }
-
       // Handle date fields
-      if (sortBy === 'date_of_birth') {
-        aValue = new Date(aValue).getTime();
-        bValue = new Date(bValue).getTime();
+      else if (sortBy === 'date_of_birth') {
+        aCompare = new Date(aValue as string | number | Date).getTime();
+        bCompare = new Date(bValue as string | number | Date).getTime();
       }
-
       // Handle string fields
-      if (typeof aValue === 'string') {
-        aValue = aValue.toLowerCase();
-        bValue = bValue.toLowerCase();
+      else {
+        aCompare = String(aValue).toLowerCase();
+        bCompare = String(bValue).toLowerCase();
       }
 
       let comparison = 0;
-      if (aValue < bValue) {
+      if (aCompare < bCompare) {
         comparison = -1;
-      } else if (aValue > bValue) {
+      } else if (aCompare > bCompare) {
         comparison = 1;
       }
 
@@ -126,7 +133,7 @@ export class PatientsService {
   }
 
   private async readPatientsFile(filePath: string): Promise<Patient[]> {
-    const fileContent = readFileSync(filePath, 'utf-8');
+    const fileContent = await readFile(filePath, 'utf-8');
     const records = parse(fileContent, {
       columns: true,
       skip_empty_lines: true,
@@ -138,12 +145,12 @@ export class PatientsService {
       },
     });
 
-    return records.map((record: any) => ({
-      id: record.id,
-      clinic_id: record.clinic_id,
-      first_name: record.first_name,
-      last_name: record.last_name,
-      date_of_birth: record.date_of_birth,
+    return records.map((record: Record<string, unknown>) => ({
+      id: record.id as number,
+      clinic_id: record.clinic_id as number,
+      first_name: record.first_name as string,
+      last_name: record.last_name as string,
+      date_of_birth: record.date_of_birth as string,
     }));
   }
 }

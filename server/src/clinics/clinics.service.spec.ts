@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { ClinicsService } from './clinics.service';
 
 // Mock the entire modules
-jest.mock('fs', () => ({
-  readFileSync: jest.fn(),
+jest.mock('fs/promises', () => ({
+  readFile: jest.fn(),
 }));
 
 jest.mock('csv-parse/sync', () => ({
@@ -12,7 +13,7 @@ jest.mock('csv-parse/sync', () => ({
 
 describe('ClinicsService', () => {
   let service: ClinicsService;
-  let mockReadFileSync: jest.MockedFunction<any>;
+  let mockReadFile: jest.MockedFunction<any>;
   let mockParse: jest.MockedFunction<any>;
 
   const mockClinicsData = [
@@ -26,11 +27,11 @@ describe('ClinicsService', () => {
     }).compile();
 
     service = module.get<ClinicsService>(ClinicsService);
-    
+
     // Get the mocked functions
-    const fs = require('fs');
+    const fs = require('fs/promises');
     const csvParse = require('csv-parse/sync');
-    mockReadFileSync = fs.readFileSync;
+    mockReadFile = fs.readFile;
     mockParse = csvParse.parse;
   });
 
@@ -40,21 +41,19 @@ describe('ClinicsService', () => {
 
   describe('findAll', () => {
     it('should return all clinics', async () => {
-      mockReadFileSync.mockReturnValue('mock csv content');
+      mockReadFile.mockResolvedValue('mock csv content');
       mockParse.mockReturnValue(mockClinicsData);
 
       const result = await service.findAll();
 
       expect(result).toEqual(mockClinicsData);
-      expect(mockReadFileSync).toHaveBeenCalled();
+      expect(mockReadFile).toHaveBeenCalled();
       expect(mockParse).toHaveBeenCalled();
     });
 
     it('should handle file read errors', async () => {
       const errorMessage = 'File not found';
-      mockReadFileSync.mockImplementation(() => {
-        throw new Error(errorMessage);
-      });
+      mockReadFile.mockRejectedValue(new Error(errorMessage));
 
       await expect(service.findAll()).rejects.toThrow(
         `Failed to read clinics data: ${errorMessage}`,
@@ -64,7 +63,7 @@ describe('ClinicsService', () => {
 
   describe('findById', () => {
     it('should return clinic by id', async () => {
-      mockReadFileSync.mockReturnValue('mock csv content');
+      mockReadFile.mockResolvedValue('mock csv content');
       mockParse.mockReturnValue(mockClinicsData);
 
       const result = await service.findById(1);
@@ -73,7 +72,7 @@ describe('ClinicsService', () => {
     });
 
     it('should return null for non-existent id', async () => {
-      mockReadFileSync.mockReturnValue('mock csv content');
+      mockReadFile.mockResolvedValue('mock csv content');
       mockParse.mockReturnValue(mockClinicsData);
 
       const result = await service.findById(999);
@@ -84,7 +83,7 @@ describe('ClinicsService', () => {
 
   describe('getNames', () => {
     it('should return clinic names only', async () => {
-      mockReadFileSync.mockReturnValue('mock csv content');
+      mockReadFile.mockResolvedValue('mock csv content');
       mockParse.mockReturnValue(mockClinicsData);
 
       const result = await service.getNames();

@@ -1,6 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
+
 import { AppModule } from '../../src/app.module';
 
 describe('Clinics API (e2e)', () => {
@@ -24,7 +25,7 @@ describe('Clinics API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/clinics')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           expect(res.body).toBeInstanceOf(Array);
           expect(res.body.length).toBeGreaterThan(0);
           expect(res.body[0]).toHaveProperty('id');
@@ -36,7 +37,7 @@ describe('Clinics API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/clinics')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           const clinic = res.body[0];
           expect(typeof clinic.id).toBe('number');
           expect(typeof clinic.name).toBe('string');
@@ -50,7 +51,7 @@ describe('Clinics API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/clinics/names')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           expect(res.body).toBeInstanceOf(Array);
           expect(res.body.length).toBe(2);
           expect(res.body).toContain('Salve Fertility');
@@ -62,7 +63,7 @@ describe('Clinics API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/clinics/names')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           res.body.forEach((name: any) => {
             expect(typeof name).toBe('string');
           });
@@ -75,7 +76,7 @@ describe('Clinics API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/clinics/1')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           expect(res.body).toHaveProperty('id', 1);
           expect(res.body).toHaveProperty('name');
           expect(typeof res.body.name).toBe('string');
@@ -86,22 +87,18 @@ describe('Clinics API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/clinics/2')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           expect(res.body).toHaveProperty('id', 2);
           expect(res.body).toHaveProperty('name');
         });
     });
 
     it('should handle non-existent clinic id', () => {
-      return request(app.getHttpServer())
-        .get('/clinics/999')
-        .expect(404);
+      return request(app.getHttpServer()).get('/clinics/999').expect(404);
     });
 
     it('should validate clinic id parameter', () => {
-      return request(app.getHttpServer())
-        .get('/clinics/invalid')
-        .expect(400);
+      return request(app.getHttpServer()).get('/clinics/invalid').expect(400);
     });
   });
 });

@@ -1,33 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class PatientDto {
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Unique identifier for the patient',
-    example: 1
+    example: 1,
   })
   id: number;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'ID of the clinic the patient belongs to',
-    example: 1
+    example: 1,
   })
   clinic_id: number;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Patient first name',
-    example: 'Harriott'
+    example: 'Harriott',
   })
   first_name: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Patient last name',
-    example: 'Wansbury'
+    example: 'Wansbury',
   })
   last_name: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Patient date of birth',
-    example: '1961-10-16'
+    example: '1961-10-16',
   })
   date_of_birth: string;
 }

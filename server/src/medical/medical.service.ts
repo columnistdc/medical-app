@@ -1,6 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { ClinicsService, Clinic } from "../clinics";
-import { PatientsService, Patient } from "../patients";
+import { Injectable } from '@nestjs/common';
+
+import { ClinicsService, Clinic } from '../clinics';
+import { PatientsService, Patient } from '../patients';
 
 export interface ClinicWithPatients extends Clinic {
   patients: Patient[];
@@ -22,10 +23,8 @@ export class MedicalService {
     const clinics = await this.clinicsService.findAll();
     const patients = await this.patientsService.findAll();
 
-    return clinics.map((clinic) => {
-      const clinicPatients = patients.filter(
-        (patient) => patient.clinic_id === clinic.id,
-      );
+    return clinics.map(clinic => {
+      const clinicPatients = patients.filter(patient => patient.clinic_id === clinic.id);
       return {
         ...clinic,
         patients: clinicPatients,
@@ -39,11 +38,11 @@ export class MedicalService {
     const patients = await this.patientsService.findAll();
 
     const clinicMap = new Map<number, string>();
-    clinics.forEach((clinic) => clinicMap.set(clinic.id, clinic.name));
+    clinics.forEach(clinic => clinicMap.set(clinic.id, clinic.name));
 
-    return patients.map((patient) => ({
+    return patients.map(patient => ({
       ...patient,
-      clinic_name: clinicMap.get(patient.clinic_id) || "Unknown Clinic",
+      clinic_name: clinicMap.get(patient.clinic_id) ?? 'Unknown Clinic',
     }));
   }
 

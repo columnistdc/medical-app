@@ -1,6 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
+
 import { AppModule } from '../../src/app.module';
 
 describe('Medical API (e2e)', () => {
@@ -24,10 +25,10 @@ describe('Medical API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/medical/clinics-with-patients')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           expect(res.body).toBeInstanceOf(Array);
           expect(res.body.length).toBe(2);
-          
+
           // Check first clinic structure
           const firstClinic = res.body[0];
           expect(firstClinic).toHaveProperty('id');
@@ -43,10 +44,10 @@ describe('Medical API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/medical/clinics-with-patients')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           const clinic1 = res.body.find((clinic: any) => clinic.id === 1);
           const clinic2 = res.body.find((clinic: any) => clinic.id === 2);
-          
+
           expect(clinic1.patient_count).toBeGreaterThan(0);
           expect(clinic2.patient_count).toBeGreaterThan(0);
           expect(clinic1.patients.length).toBe(clinic1.patient_count);
@@ -58,7 +59,7 @@ describe('Medical API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/medical/clinics-with-patients')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           res.body.forEach((clinic: any) => {
             clinic.patients.forEach((patient: any) => {
               expect(patient.clinic_id).toBe(clinic.id);
@@ -73,10 +74,10 @@ describe('Medical API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/medical/patients-with-clinic')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           expect(res.body).toBeInstanceOf(Array);
           expect(res.body.length).toBeGreaterThan(0);
-          
+
           const patient = res.body[0];
           expect(patient).toHaveProperty('id');
           expect(patient).toHaveProperty('clinic_id');
@@ -92,7 +93,7 @@ describe('Medical API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/medical/patients-with-clinic')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           const clinicNames = res.body.map((patient: any) => patient.clinic_name);
           expect(clinicNames).toContain('Salve Fertility');
           expect(clinicNames).toContain('London IVF');
@@ -103,14 +104,14 @@ describe('Medical API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/medical/patients-with-clinic')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           const clinic1Patients = res.body.filter((patient: any) => patient.clinic_id === 1);
           const clinic2Patients = res.body.filter((patient: any) => patient.clinic_id === 2);
-          
+
           clinic1Patients.forEach((patient: any) => {
             expect(patient.clinic_name).toBe('Salve Fertility');
           });
-          
+
           clinic2Patients.forEach((patient: any) => {
             expect(patient.clinic_name).toBe('London IVF');
           });
@@ -123,11 +124,11 @@ describe('Medical API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/medical/summary')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           expect(res.body).toHaveProperty('total_clinics');
           expect(res.body).toHaveProperty('total_patients');
           expect(res.body).toHaveProperty('clinics');
-          
+
           expect(typeof res.body.total_clinics).toBe('number');
           expect(typeof res.body.total_patients).toBe('number');
           expect(Array.isArray(res.body.clinics)).toBe(true);
@@ -138,7 +139,7 @@ describe('Medical API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/medical/summary')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           expect(res.body.total_clinics).toBe(2);
           expect(res.body.total_patients).toBeGreaterThan(0);
           expect(res.body.clinics.length).toBe(res.body.total_clinics);
@@ -149,11 +150,11 @@ describe('Medical API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/medical/summary')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           const calculatedTotal = res.body.clinics.reduce((sum: number, clinic: any) => {
             return sum + clinic.patient_count;
           }, 0);
-          
+
           expect(calculatedTotal).toBe(res.body.total_patients);
         });
     });
@@ -162,7 +163,7 @@ describe('Medical API (e2e)', () => {
       return request(app.getHttpServer())
         .get('/medical/summary')
         .expect(200)
-        .expect((res) => {
+        .expect(res => {
           res.body.clinics.forEach((clinic: any) => {
             expect(clinic).toHaveProperty('id');
             expect(clinic).toHaveProperty('name');

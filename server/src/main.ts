@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -17,7 +18,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  
+
   // Customize Swagger UI
   SwaggerModule.setup('api', app, document, {
     swaggerOptions: {
@@ -31,4 +32,8 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 4000);
 }
-bootstrap();
+bootstrap().catch(error => {
+  // eslint-disable-next-line no-console
+  console.error('Failed to start application:', error);
+  process.exit(1);
+});

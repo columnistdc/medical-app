@@ -3,6 +3,7 @@ import eslint from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import importPlugin from 'eslint-plugin-import';
 
 export default tseslint.config(
   {
@@ -11,6 +12,7 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   eslintPluginPrettierRecommended,
+  // Configuration for all files (basic rules)
   {
     languageOptions: {
       globals: {
@@ -25,7 +27,12 @@ export default tseslint.config(
       },
     },
   },
+  // Configuration for main source code (strict rules)
   {
+    files: ['src/**/*.ts'],
+    plugins: {
+      import: importPlugin,
+    },
     rules: {
       // Common rules
       'no-console': 'warn',
@@ -80,6 +87,19 @@ export default tseslint.config(
           }
         }
       ]
+    },
+  },
+  // Special configuration for test files (both unit and e2e) - MUST BE LAST
+  {
+    files: ['**/*.spec.ts', 'test/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
     },
   },
 );

@@ -1,7 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MedicalService } from './medical.service';
+
 import { ClinicsService } from '../clinics';
-import { PatientsService } from '../patients';
+import { PatientsService, Patient } from '../patients';
+
+import { MedicalService } from './medical.service';
 
 describe('MedicalService', () => {
   let service: MedicalService;
@@ -14,10 +16,34 @@ describe('MedicalService', () => {
   ];
 
   const mockPatients = [
-    { id: 1, clinic_id: 1, first_name: 'Harriott', last_name: 'Wansbury', date_of_birth: '1961-10-16' },
-    { id: 2, clinic_id: 1, first_name: 'Glennis', last_name: 'Eustis', date_of_birth: '1985-04-08' },
-    { id: 1, clinic_id: 2, first_name: 'Emlynn', last_name: 'Tompkin', date_of_birth: '1964-10-02' },
-    { id: 2, clinic_id: 2, first_name: 'Kenyon', last_name: 'Domleo', date_of_birth: '1960-05-24' },
+    {
+      id: 1,
+      clinic_id: 1,
+      first_name: 'Harriott',
+      last_name: 'Wansbury',
+      date_of_birth: '1961-10-16',
+    },
+    {
+      id: 2,
+      clinic_id: 1,
+      first_name: 'Glennis',
+      last_name: 'Eustis',
+      date_of_birth: '1985-04-08',
+    },
+    {
+      id: 1,
+      clinic_id: 2,
+      first_name: 'Emlynn',
+      last_name: 'Tompkin',
+      date_of_birth: '1964-10-02',
+    },
+    {
+      id: 2,
+      clinic_id: 2,
+      first_name: 'Kenyon',
+      last_name: 'Domleo',
+      date_of_birth: '1960-05-24',
+    },
   ];
 
   beforeEach(async () => {
@@ -56,7 +82,7 @@ describe('MedicalService', () => {
       const result = await service.getClinicsWithPatients();
 
       expect(result).toHaveLength(2);
-      
+
       // Check Salve Fertility clinic
       expect(result[0]).toEqual({
         id: 1,
@@ -75,10 +101,8 @@ describe('MedicalService', () => {
     });
 
     it('should handle clinic with no patients', async () => {
-      const clinicsWithNoPatients = [
-        { id: 1, name: 'Empty Clinic' },
-      ];
-      const emptyPatients: any[] = [];
+      const clinicsWithNoPatients = [{ id: 1, name: 'Empty Clinic' }];
+      const emptyPatients: Patient[] = [];
 
       clinicsService.findAll.mockResolvedValue(clinicsWithNoPatients);
       patientsService.findAll.mockResolvedValue(emptyPatients);
@@ -102,7 +126,7 @@ describe('MedicalService', () => {
       const result = await service.getPatientsWithClinicInfo();
 
       expect(result).toHaveLength(4);
-      
+
       // Check first patient
       expect(result[0]).toEqual({
         ...mockPatients[0],
@@ -118,7 +142,13 @@ describe('MedicalService', () => {
 
     it('should handle unknown clinic_id gracefully', async () => {
       const patientsWithUnknownClinic = [
-        { id: 1, clinic_id: 999, first_name: 'Unknown', last_name: 'Patient', date_of_birth: '1990-01-01' },
+        {
+          id: 1,
+          clinic_id: 999,
+          first_name: 'Unknown',
+          last_name: 'Patient',
+          date_of_birth: '1990-01-01',
+        },
       ];
 
       clinicsService.findAll.mockResolvedValue(mockClinics);
@@ -160,7 +190,15 @@ describe('MedicalService', () => {
 
     it('should calculate totals correctly', async () => {
       const singleClinic = [{ id: 1, name: 'Single Clinic' }];
-      const singlePatient = [{ id: 1, clinic_id: 1, first_name: 'Single', last_name: 'Patient', date_of_birth: '1990-01-01' }];
+      const singlePatient: Patient[] = [
+        {
+          id: 1,
+          clinic_id: 1,
+          first_name: 'Single',
+          last_name: 'Patient',
+          date_of_birth: '1990-01-01',
+        },
+      ];
 
       clinicsService.findAll.mockResolvedValue(singleClinic);
       patientsService.findAll.mockResolvedValue(singlePatient);

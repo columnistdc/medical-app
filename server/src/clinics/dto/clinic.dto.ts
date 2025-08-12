@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ClinicDto {
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Unique identifier for the clinic',
-    example: 1
+    example: 1,
   })
   id: number;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Name of the clinic',
-    example: 'Salve Fertility'
+    example: 'Salve Fertility',
   })
   name: string;
 }

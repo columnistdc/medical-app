@@ -1,7 +1,8 @@
+import { readFile } from 'fs/promises';
+import { join } from 'path';
+
 import { Injectable } from '@nestjs/common';
 import { parse } from 'csv-parse/sync';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
 export interface Clinic {
   id: number;
@@ -14,7 +15,7 @@ export class ClinicsService {
 
   async findAll(): Promise<Clinic[]> {
     try {
-      const fileContent = readFileSync(this.dataPath, 'utf-8');
+      const fileContent = await readFile(this.dataPath, 'utf-8');
       const records = parse(fileContent, {
         columns: true,
         skip_empty_lines: true,
@@ -26,19 +27,20 @@ export class ClinicsService {
         },
       });
 
-      return records.map((record: any) => ({
-        id: record.id,
-        name: record.name,
+      return records.map((record: Record<string, unknown>) => ({
+        id: record.id as number,
+        name: record.name as string,
       }));
     } catch (error) {
-      throw new Error(`Failed to read clinics data: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to read clinics data: ${errorMessage}`);
     }
   }
 
   async findById(id: number): Promise<Clinic | null> {
     const clinics = await this.findAll();
     const clinic = clinics.find(clinic => clinic.id === id);
-    return clinic || null;
+    return clinic ?? null;
   }
 
   async getNames(): Promise<string[]> {
