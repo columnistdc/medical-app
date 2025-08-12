@@ -1,5 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { writeFileSync } from 'fs';
+import { join } from 'path';
 
 import { AppModule } from './app.module';
 
@@ -18,6 +20,13 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
+
+  // Generate OpenAPI JSON file for frontend
+  if (process.env.NODE_ENV === 'development') {
+    const outputPath = join(__dirname, '../../openapi.json');
+    writeFileSync(outputPath, JSON.stringify(document, null, 2));
+    console.log(`OpenAPI specification saved to: ${outputPath}`);
+  }
 
   // Customize Swagger UI
   SwaggerModule.setup('api', app, document, {

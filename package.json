@@ -17,7 +17,11 @@
     "format:check:client": "cd client && npm run format:check",
     "format:check:server": "cd server && npm run format:check",
     "code:check": "npm run lint && npm run format:check",
-    "code:fix": "npm run lint:fix && npm run format"
+    "code:fix": "npm run lint:fix && npm run format",
+    "generate:openapi": "cd server && npm run generate:openapi",
+    "generate:types": "npm run generate:openapi && cd client && npm run generate:types",
+    "generate:types:watch": "npm run generate:openapi && cd client && npm run generate:types:watch",
+    "dev": "./scripts/dev.sh"
   },
   "devDependencies": {
     "husky": "8.0.3",

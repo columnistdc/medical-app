@@ -25,7 +25,9 @@
     "test:api": "jest --config ./test/jest-e2e.json --testPathPattern=test/api",
     "test:all": "npm run test && npm run test:e2e",
     "code:check": "npm run lint:check && npm run format:check",
-    "code:fix": "npm run lint:fix && npm run format"
+    "code:fix": "npm run lint:fix && npm run format",
+    "generate:openapi": "npm run build && node scripts/generate-openapi.js",
+    "generate:types": "npm run generate:openapi"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
