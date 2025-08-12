@@ -15,7 +15,7 @@ const baseRules = {
 }
 
 export default tseslint.config(
-  { ignores: ['dist', 'build', 'coverage', '.vite'] },
+  { ignores: ['dist', 'build', 'coverage', '.vite', 'src/types/api/**/*'] },
 
   js.configs.recommended,
   ...tseslint.configs.recommended,

@@ -1,0 +1,12 @@
+# Generated API types
+src/types/api/
+
+# Build outputs
+dist/
+build/
+
+# Dependencies
+node_modules/
+
+# Cache
+.eslintcache

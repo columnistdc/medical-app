@@ -1,7 +1,8 @@
-import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
+
+import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
 
@@ -25,6 +26,7 @@ async function bootstrap() {
   if (process.env.NODE_ENV === 'development') {
     const outputPath = join(__dirname, '../../openapi.json');
     writeFileSync(outputPath, JSON.stringify(document, null, 2));
+    // eslint-disable-next-line no-console
     console.log(`OpenAPI specification saved to: ${outputPath}`);
   }
 
