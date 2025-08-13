@@ -16,7 +16,9 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,md,css,scss}\"",
     "typecheck": "tsc --noEmit",
     "code:check": "npm run lint:check && npm run format:check",
-    "code:fix": "npm run lint:fix && npm run format"
+    "code:fix": "npm run lint:fix && npm run format",
+    "generate:types": "openapi --input ../openapi.json --output src/types/api --client fetch",
+    "generate:types:watch": "openapi --input ../openapi.json --output src/types/api --client fetch --watch"
   },
   "dependencies": {
     "dexie": "4.0.11",
@@ -45,6 +47,7 @@
     "eslint-plugin-tailwindcss": "3.18.2",
     "globals": "16.3.0",
     "jsdom": "26.1.0",
+    "openapi-typescript-codegen": "^0.29.0",
     "postcss": "8.5.6",
     "prettier": "3.6.2",
     "prettier-plugin-tailwindcss": "0.6.14",

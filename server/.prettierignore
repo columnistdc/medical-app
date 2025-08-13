@@ -37,11 +37,3 @@ coverage/
 # Temporary files
 *.tmp
 *.temp
-
-# Husky
-.husky/
-
-# Config files
-*.config.js
-*.config.ts
-*.config.mjs
